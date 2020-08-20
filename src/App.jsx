@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ApolloProvider } from "@apollo/client";
+import { ApolloProvider, gql } from "@apollo/client";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import ReduxLoadingBar, { showLoading, hideLoading } from "react-redux-loading";
@@ -22,6 +22,8 @@ import Amplify, { API, graphqlOperation } from "aws-amplify";
 import aws_exports from "./aws-exports";
 import Signup from "./app/screens/auth/Signup";
 import Signin from "./app/screens/auth/Signin";
+
+import AWSAppSyncClient from "aws-appsync";
 
 import "./App.css";
 import ForgetPassword from "./app/screens/auth/ForgetPassword";
@@ -55,6 +57,16 @@ const query = `query GetAllMenu{
 }
 `;
 
+const client2 = new AWSAppSyncClient({
+  url:
+    "https://ivgyaibe5rhjnpe4gtieeoddrm.appsync-api.us-east-1.amazonaws.com/graphql",
+  region: "us-east-1",
+  auth: {
+    type: "API_KEY",
+    apiKey: "da2-z2titrwl6bb2zggk2ol7vsvafy",
+  },
+});
+
 function App(props) {
   const [showLoader, setShowloader] = useState(true);
 
@@ -73,40 +85,23 @@ function App(props) {
       props.dispatch(setAuthUser(data));
     }
 
-    try {
-      const menuData = await API.graphql(graphqlOperation(query));
-      // console.log(menuData.data);
-      setMenuData({
-        ivdrips: menuData.data.getAllIvdrips,
-        therapies: menuData.data.getAllTherapies,
-        teams: menuData.data.getAllTeams,
-        services: menuData.data.getAllServices,
+    client2
+      .query({
+        query: gql(query),
+      })
+      .then(({ data }) => {
+        setMenuData({
+          ivdrips: data.getAllIvdrips,
+          therapies: data.getAllTherapies,
+          teams: data.getAllTeams,
+          services: data.getAllServices,
+        });
+        setShowloader(false);
+        props.dispatch(hideLoading());
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    } catch (error) {
-      console.log(error);
-    }
-    setShowloader(false);
-    props.dispatch(hideLoading());
-
-    // wf
-    // client
-    //   .query({
-    //     query: getMenuQuery,
-    //   })
-    //   .then(({ data }) => {
-    //     setMenuData({
-    //       ivdrips: data.getIvdrips,
-    //       therapies: data.getTherapies,
-    //       teams: data.getTeams,
-    //       services: data.getServices,
-    //     });
-    //     setShowloader(false);
-    //     props.dispatch(hideLoading());
-    //   })
-    //   .catch((err) => {
-    //     setShowloader(false);
-    //     props.dispatch(hideLoading());
-    //   });
   };
 
   useEffect(() => {
