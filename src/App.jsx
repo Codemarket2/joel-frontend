@@ -88,6 +88,7 @@ function App(props) {
     setShowloader(false);
     props.dispatch(hideLoading());
 
+    // wf
     // client
     //   .query({
     //     query: getMenuQuery,
