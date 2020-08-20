@@ -18,7 +18,7 @@ import { client } from "./app/graphql/";
 import { getMenuQuery } from "./app/graphql/query";
 import { setAuthUser } from "./app/redux/actions/auth";
 
-import Amplify from "aws-amplify";
+import Amplify, { API, graphqlOperation } from "aws-amplify";
 import aws_exports from "./aws-exports";
 import Signup from "./app/screens/auth/Signup";
 import Signin from "./app/screens/auth/Signin";
@@ -27,6 +27,33 @@ import "./App.css";
 import ForgetPassword from "./app/screens/auth/ForgetPassword";
 
 Amplify.configure(aws_exports);
+
+const query = `query GetAllMenu{
+    getAllTeams{
+    title
+    slug
+    description
+  }
+  
+    getAllIvdrips{
+    title
+    slug
+    description
+  }
+  
+   getAllTherapies{
+    title
+    slug
+    description
+  }
+  
+  getAllServices{
+    title
+    slug
+    description
+  }
+}
+`;
 
 function App(props) {
   const [showLoader, setShowloader] = useState(true);
@@ -38,7 +65,7 @@ function App(props) {
     teams: [],
   });
 
-  const getMenu = () => {
+  const getMenu = async () => {
     props.dispatch(showLoading());
 
     var data = JSON.parse(localStorage.getItem("90210wc-data"));
@@ -46,24 +73,39 @@ function App(props) {
       props.dispatch(setAuthUser(data));
     }
 
-    client
-      .query({
-        query: getMenuQuery,
-      })
-      .then(({ data }) => {
-        setMenuData({
-          ivdrips: data.getIvdrips,
-          therapies: data.getTherapies,
-          teams: data.getTeams,
-          services: data.getServices,
-        });
-        setShowloader(false);
-        props.dispatch(hideLoading());
-      })
-      .catch((err) => {
-        setShowloader(false);
-        props.dispatch(hideLoading());
+    try {
+      const menuData = await API.graphql(graphqlOperation(query));
+      // console.log(menuData.data);
+      setMenuData({
+        ivdrips: menuData.data.getAllIvdrips,
+        therapies: menuData.data.getAllTherapies,
+        teams: menuData.data.getAllTeams,
+        services: menuData.data.getAllServices,
       });
+    } catch (error) {
+      console.log(error);
+    }
+    setShowloader(false);
+    props.dispatch(hideLoading());
+
+    // client
+    //   .query({
+    //     query: getMenuQuery,
+    //   })
+    //   .then(({ data }) => {
+    //     setMenuData({
+    //       ivdrips: data.getIvdrips,
+    //       therapies: data.getTherapies,
+    //       teams: data.getTeams,
+    //       services: data.getServices,
+    //     });
+    //     setShowloader(false);
+    //     props.dispatch(hideLoading());
+    //   })
+    //   .catch((err) => {
+    //     setShowloader(false);
+    //     props.dispatch(hideLoading());
+    //   });
   };
 
   useEffect(() => {
