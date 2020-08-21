@@ -42,6 +42,7 @@ class Signin extends Component {
         })
         .catch((err) => {
           this.props.dispatch(hideLoading());
+          this.setState({ ...this.state, disabled: false });
           if (err.code === "UserNotConfirmedException") {
             this.sendVerificationCode(email);
           } else {

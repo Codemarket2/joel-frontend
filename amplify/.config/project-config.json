@@ -1,5 +1,8 @@
 {
-    "projectName": "www90210wccom",
+    "providers": [
+        "awscloudformation"
+    ],
+    "projectName": "90210wc-frontend",
     "version": "3.0",
     "frontend": "javascript",
     "javascript": {
@@ -10,8 +13,5 @@
             "BuildCommand": "npm run-script build",
             "StartCommand": "npm run-script start"
         }
-    },
-    "providers": [
-        "awscloudformation"
-    ]
+    }
 }

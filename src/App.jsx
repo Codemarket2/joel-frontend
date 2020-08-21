@@ -17,14 +17,12 @@ import Appointment from "./app/screens/Appointment";
 import { client } from "./app/graphql/";
 import { getMenuQuery } from "./app/graphql/query";
 import { setAuthUser } from "./app/redux/actions/auth";
-
 import Amplify from "aws-amplify";
 import aws_exports from "./aws-exports";
 import Signup from "./app/screens/auth/Signup";
 import Signin from "./app/screens/auth/Signin";
-
-import "./App.css";
 import ForgetPassword from "./app/screens/auth/ForgetPassword";
+import "./App.css";
 
 Amplify.configure(aws_exports);
 
@@ -38,7 +36,7 @@ function App(props) {
     teams: [],
   });
 
-  const getMenu = () => {
+  const getMenu = async () => {
     props.dispatch(showLoading());
 
     var data = JSON.parse(localStorage.getItem("90210wc-data"));
@@ -52,15 +50,16 @@ function App(props) {
       })
       .then(({ data }) => {
         setMenuData({
-          ivdrips: data.getIvdrips,
-          therapies: data.getTherapies,
-          teams: data.getTeams,
-          services: data.getServices,
+          ivdrips: data.getAllIvdrips,
+          therapies: data.getAllTherapies,
+          teams: data.getAllTeams,
+          services: data.getAllServices,
         });
         setShowloader(false);
         props.dispatch(hideLoading());
       })
       .catch((err) => {
+        console.log(err);
         setShowloader(false);
         props.dispatch(hideLoading());
       });
