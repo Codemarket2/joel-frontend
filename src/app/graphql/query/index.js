@@ -1,23 +1,26 @@
 import { gql } from "@apollo/client";
 
-export const getMenuQuery = gql `
-  query GetMenuData {
-    getIvdrips {
+export const getMenuQuery = gql`
+  query GetAllMenu {
+    getAllTeams {
       title
       slug
       description
     }
-    getServices {
+
+    getAllIvdrips {
       title
       slug
       description
     }
-    getTeams {
+
+    getAllTherapies {
       title
       slug
       description
     }
-    getTherapies {
+
+    getAllServices {
       title
       slug
       description
@@ -25,7 +28,7 @@ export const getMenuQuery = gql `
   }
 `;
 
-export const getAppointmentsQuery = gql `
+export const getAppointmentsQuery = gql`
   {
     getAppointments {
       _id

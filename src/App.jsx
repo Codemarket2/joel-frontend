@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ApolloProvider, gql } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import ReduxLoadingBar, { showLoading, hideLoading } from "react-redux-loading";
@@ -17,55 +17,14 @@ import Appointment from "./app/screens/Appointment";
 import { client } from "./app/graphql/";
 import { getMenuQuery } from "./app/graphql/query";
 import { setAuthUser } from "./app/redux/actions/auth";
-
-import Amplify, { API, graphqlOperation } from "aws-amplify";
+import Amplify from "aws-amplify";
 import aws_exports from "./aws-exports";
 import Signup from "./app/screens/auth/Signup";
 import Signin from "./app/screens/auth/Signin";
-
-import AWSAppSyncClient from "aws-appsync";
-
-import "./App.css";
 import ForgetPassword from "./app/screens/auth/ForgetPassword";
+import "./App.css";
 
 Amplify.configure(aws_exports);
-
-const query = `query GetAllMenu{
-    getAllTeams{
-    title
-    slug
-    description
-  }
-  
-    getAllIvdrips{
-    title
-    slug
-    description
-  }
-  
-   getAllTherapies{
-    title
-    slug
-    description
-  }
-  
-  getAllServices{
-    title
-    slug
-    description
-  }
-}
-`;
-
-const client2 = new AWSAppSyncClient({
-  url:
-    "https://ivgyaibe5rhjnpe4gtieeoddrm.appsync-api.us-east-1.amazonaws.com/graphql",
-  region: "us-east-1",
-  auth: {
-    type: "API_KEY",
-    apiKey: "da2-z2titrwl6bb2zggk2ol7vsvafy",
-  },
-});
 
 function App(props) {
   const [showLoader, setShowloader] = useState(true);
@@ -85,9 +44,9 @@ function App(props) {
       props.dispatch(setAuthUser(data));
     }
 
-    client2
+    client
       .query({
-        query: gql(query),
+        query: getMenuQuery,
       })
       .then(({ data }) => {
         setMenuData({
@@ -101,6 +60,8 @@ function App(props) {
       })
       .catch((err) => {
         console.log(err);
+        setShowloader(false);
+        props.dispatch(hideLoading());
       });
   };
 
