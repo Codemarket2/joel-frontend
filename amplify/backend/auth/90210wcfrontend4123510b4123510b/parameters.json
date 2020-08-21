@@ -1,8 +1,6 @@
 {
-    "identityPoolName": "www90210wccom9ac2ec8a_identitypool_9ac2ec8a",
-    "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "www9029ac2ec8a",
-    "userPoolName": "www90210wccom9ac2ec8a_userpool_9ac2ec8a",
+    "resourceNameTruncated": "90210w4123510b",
+    "userPoolName": "90210wcfrontend4123510b_userpool_4123510b",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -29,11 +27,19 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "www9029ac2ec8a_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "90210w4123510b_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "9ac2ec8a",
-    "resourceName": "www90210wccom9ac2ec8a",
-    "authSelections": "identityPoolAndUserPool",
+    "useDefault": "manual",
+    "authSelections": "userPoolOnly",
+    "resourceName": "90210wcfrontend4123510b4123510b",
+    "usernameAttributes": [
+        "email"
+    ],
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": "{}",
+    "hostedUI": false,
+    "userPoolGroupList": [],
     "authRoleArn": {
         "Fn::GetAtt": [
             "AuthRole",
@@ -46,12 +52,6 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
-    "usernameAttributes": [
-        "email"
-    ],
-    "triggers": "{}",
-    "userPoolGroupList": [],
     "parentStack": {
         "Ref": "AWS::StackId"
     },

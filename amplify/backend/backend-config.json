@@ -1,13 +1,6 @@
 {
-	"hosting": {
-		"amplifyhosting": {
-			"service": "amplifyhosting",
-			"providerPlugin": "awscloudformation",
-			"type": "manual"
-		}
-	},
 	"auth": {
-		"www90210wccom9ac2ec8a": {
+		"90210wcfrontend4123510b4123510b": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
 			"dependsOn": []
